@@ -2,7 +2,10 @@
 #define KIF_H_
 
 #include <stdint.h>
-#include <display/vga.h> // Change this to your VGA handler, to draw pixels
+
+#define draw_pixel(x, y, r, g, b) plot_pixel(x, y, r, g, b)
+
+// ^^^ Change the plot_pixel function to your draw thing
 
 void draw_image(char* rawData, uint64_t startX, uint64_t startY)
 
