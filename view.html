@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>KIFBMB Viewer</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+    }
+    canvas {
+      display: block;
+      margin: auto;
+      image-rendering: optimizeSpeed;
+    }
+  </style>
+</head>
+<body>
+  <input type="file" id="fileInput" />
+  <canvas id="canvas" width="400" height="400"></canvas>
+  <script>
+    const fileInput = document.getElementById('fileInput');
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    function loadFile(event) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+      reader.onload = function() {
+        const data = new Uint8Array(reader.result);
+        const kifbmbHeader = {
+          magic: 0x69420666,
+          width: 0,
+          height: 0,
+          checksum: 0
+        };
+        for (let i = 0; i < 8; i++) {
+          kifbmbHeader.magic |= (data[i] << (8 * (7 - i)));
+        }
+        for (let i = 8; i < 12; i++) {
+          kifbmbHeader.width |= (data[i] << (8 * (11 - i)));
+        }
+        for (let i = 12; i < 16; i++) {
+          kifbmbHeader.height |= (data[i] << (8 * (15 - i)));
+        }
+        for (let i = 16; i < 20; i++) {
+          kifbmbHeader.checksum |= (data[i] << (8 * (19 - i)));
+        }
+
+        const expectedChecksum = calculateChecksum(data);
+        if (expectedChecksum !== 0) {
+          alert('Invalid checksum :' + expectedChecksum);
+          return;
+        }
+
+        for (let i = 20; i < data.length; i += 4) {
+          const r = data[i];
+          const g = data[i + 1];
+          const b = data[i + 2];
+          const a = data[i + 3];
+          ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ',' + a / 255 + ')';
+          ctx.fillRect((i - 20) % kifbmbHeader.width, Math.floor((i - 20) / kifbmbHeader.width), 1, 1);
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    }
+
+    function calculateChecksum(data) {
+      let sum = 0;
+      for (let i = 0; i < data.length; i++) {
+        sum += data[i];
+      }
+      return sum & 0xFF;
+    }
+
+    fileInput.addEventListener('change', loadFile);
+
+  </script>
+</body>
