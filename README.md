@@ -9,12 +9,13 @@ The KIFBMB format follows a straightforward structure:
 1. **Header**:
 ```C
 typedef struct {
-    uint32_t magic;         // jsut a magic number
+    uint32_t magic;         // just a magic number 
     uint32_t width,height ; // dimensions of the image
     uint8_t  checksum;      // basic checksum: all bytes in this file must add up to 0
 
 } kifbmb_header;
 ```
+the magic number is `0x69420666`
 1. **Pixel Data**: Following the header, the pixel data consists of 32-bit RGBA values for each pixel.
 
 ### Format Overview
