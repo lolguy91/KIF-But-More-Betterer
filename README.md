@@ -29,4 +29,4 @@ The header contains two 32-bit integers representing the image width and height,
 Each uint32_t after the header contains RGBA values for a single pixel. That is fucking it.
 
 ## License
-KernelImageFormat is distributed under the GNU General Public License v3.0 (GPLv3). See the `LICENSE` file for more details.
+Kernel Image Format But More Betterer is distributed under the `GNU General Public License v3.0 (GPLv3)`. See the `LICENSE` file for more details.
