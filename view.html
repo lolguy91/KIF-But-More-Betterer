@@ -11,14 +11,13 @@
       height: 100%;
     }
     canvas {
-      display: block;
       margin: auto;
       image-rendering: optimizeSpeed;
     }
   </style>
 </head>
 <body>
-  <input type="file" id="fileInput" />
+  <input type="file" id="fileInput" /></br>
   <canvas id="canvas" width="400" height="400"></canvas>
   <script>
     const fileInput = document.getElementById('fileInput');
@@ -33,35 +32,36 @@
         const kifbmbHeader = {
           magic: 0x69420666,
           width: 0,
-          height: 0,
-          checksum: 0
+          height: 0
         };
-        for (let i = 0; i < 8; i++) {
-          kifbmbHeader.magic |= (data[i] << (8 * (7 - i)));
+        for (let i = 0; i < data.length; i++) {
+          if (i < 4) {
+            kifbmbHeader.magic = (kifbmbHeader.magic << 8) | data[i];
+          } else if (i < 8) {
+            kifbmbHeader.width = (kifbmbHeader.width << 8) | data[i];
+          } else if (i < 12) {
+            kifbmbHeader.height = (kifbmbHeader.height << 8) | data[i];
+          }
         }
-        for (let i = 8; i < 12; i++) {
-          kifbmbHeader.width |= (data[i] << (8 * (11 - i)));
+        if (kifbmbHeader.magic !== 0x69420666) {
+          alert('Invalid magic number :' + kifbmbHeader.magic);
+          return;
         }
-        for (let i = 12; i < 16; i++) {
-          kifbmbHeader.height |= (data[i] << (8 * (15 - i)));
-        }
-        for (let i = 16; i < 20; i++) {
-          kifbmbHeader.checksum |= (data[i] << (8 * (19 - i)));
-        }
-
         const expectedChecksum = calculateChecksum(data);
         if (expectedChecksum !== 0) {
           alert('Invalid checksum :' + expectedChecksum);
           return;
         }
-
-        for (let i = 20; i < data.length; i += 4) {
-          const r = data[i];
-          const g = data[i + 1];
-          const b = data[i + 2];
-          const a = data[i + 3];
-          ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ',' + a / 255 + ')';
-          ctx.fillRect((i - 20) % kifbmbHeader.width, Math.floor((i - 20) / kifbmbHeader.width), 1, 1);
+        for (let y = 0; y < kifbmbHeader.height; y++) {
+          for (let x = 0; x < kifbmbHeader.width; x++) {
+            const index = 13 + ((y * kifbmbHeader.width + x) * 4);
+            const r = data[index + 0];
+            const g = data[index + 1];
+            const b = data[index + 2];
+            const a = data[index + 3];
+            ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
+            ctx.fillRect(x*10, y*10, 10, 10);
+          }
         }
       };
       reader.readAsArrayBuffer(file);
