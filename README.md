@@ -1,6 +1,7 @@
 # Kernel Image Format But More Betterer (KIFBMB)
 
-Kernel Image Format But More Betterer (KIFBMB) is a simple format designed for encoding small icons and logos, typically useful for boot screens, system icons, and other similar contexts within OS development.
+Kernel Image Format But More Betterer (KIFBMB) is a simple format made for fun.
+It is an extension of [Kevin Alavik's KIF](https://kevinalavik.github.io/kif.html)
 
 ## Format Specification
 
