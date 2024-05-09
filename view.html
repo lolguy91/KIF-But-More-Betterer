@@ -20,17 +20,24 @@
   <input type="file" id="fileInput" /></br>
   <canvas id="canvas" width="400" height="400"></canvas>
   <script>
+    // DOM elements
     const fileInput = document.getElementById('fileInput');
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
 
+    /**
+     * Loads a file selected by the user, parses its contents as a KIFBMB
+     * image and renders it on the canvas.
+     */
     function loadFile(event) {
       const file = event.target.files[0];
       const reader = new FileReader();
       reader.onload = function() {
         const data = new Uint8Array(reader.result);
+
+        // Extract the header from the file
         const kifbmbHeader = {
-          magic: 0x69420666,
+          magic: 0,
           width: 0,
           height: 0
         };
@@ -47,11 +54,15 @@
           alert('Invalid magic number :' + kifbmbHeader.magic);
           return;
         }
+
+        // Calculate the checksum and check if it's valid
         const expectedChecksum = calculateChecksum(data);
         if (expectedChecksum !== 0) {
           alert('Invalid checksum :' + expectedChecksum);
           return;
         }
+
+        // Render the image on the canvas
         for (let y = 0; y < kifbmbHeader.height; y++) {
           for (let x = 0; x < kifbmbHeader.width; x++) {
             const index = 13 + ((y * kifbmbHeader.width + x) * 4);
@@ -60,13 +71,16 @@
             const b = data[index + 2];
             const a = data[index + 3];
             ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
-            ctx.fillRect(x*10, y*10, 10, 10);
+            ctx.fillRect(x * 10, y * 10, 10, 10);
           }
         }
       };
       reader.readAsArrayBuffer(file);
     }
 
+    /**
+     * Calculates the checksum of a given buffer of data.
+     */
     function calculateChecksum(data) {
       let sum = 0;
       for (let i = 0; i < data.length; i++) {
@@ -75,7 +89,9 @@
       return sum & 0xFF;
     }
 
+    // Add event listener to the file input
     fileInput.addEventListener('change', loadFile);
 
   </script>
 </body>
+
