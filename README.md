@@ -5,7 +5,7 @@ It is an extension of [Kevin Alavik's KIF](https://kevinalavik.github.io/kif.htm
 
 ## Format Specification
 
-The KIFBMB format follows a straightforward structure:
+The `KIFBMB` format follows a straightforward structure:
 
 1. **Header**:
 ```C
@@ -20,14 +20,14 @@ the magic number is `0x69420666`
 1. **Pixel Data**: Following the header, the pixel data consists of 32-bit RGBA values for each pixel.
 
 ### Format Overview
-The Kernel Image Format But More Betterer (KIFBMB) is just a simple-ass binary image format.
+The Kernel Image Format But More Betterer (`KIFBMB`) is just a simple-ass image format.
 The file format consists of a header section followed by pixel data.
 
 ### Header
-The header contains two 32-bit integers representing the image width and height, respectively.
+The header contains two `uint32_t`s representing the image width and height, respectively.
 
 ### Pixel Data
-Each uint32_t after the header contains RGBA values for a single pixel. That is fucking it.
+Each `uint32_t` after the header contains `RGBA` values for a single pixel. That is fucking it.
 
 ## License
-Kernel Image Format But More Betterer is distributed under the `GNU General Public License v3.0 (GPLv3)`. See the `LICENSE` file for more details.
+`KIFBMB` is distributed under the `GNU General Public License v3.0 (GPLv3)`. See the `LICENSE` file for more details.
