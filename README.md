@@ -17,6 +17,7 @@ typedef struct {
 } kifbmb_header;
 ```
 the magic number is `0x69420666`
+**note: all fields are in little endian**
 1. **Pixel Data**: Following the header, the pixel data consists of 32-bit RGBA values for each pixel.
 
 ### Header
