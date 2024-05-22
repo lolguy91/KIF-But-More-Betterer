@@ -24,7 +24,7 @@ the magic number is `0x69420666`
 The header contains two `uint32_t`s representing the image width and height, respectively.
 
 ### Pixel Data
-Each `uint32_t` after the header contains `RGBA` values for a single pixel. That's fucking it.
+Each `uint32_t` after the header contains `RGBA` values for a single pixel. That's it.
 
 ## License
 `KIFBMB` is distributed under the `GNU General Public License v3.0 (GPLv3)`. See the `LICENSE` file for more details.
